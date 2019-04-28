@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title> Random Quote Generator</title>
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Oxygen|Pacifico" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+
+  <style>
+    .wallpaper {
+      background: url("https://www.kindersoaps.com/wp-content/kindersoaps.com/2015/07/abstract-wallpapers-blurred-background-wallpaper-34795.jpg");
+      background-repeat: no-repeat;
+    }
+
+    .quoteBox {
+      margin: auto;
+      display: block;
+      padding-left: 25%;
+      padding-right: 25%;
+      padding-top: 10%;
+      padding-bottom: 10%;
+    }
+
+    .quotefont {
+      font-size: 40px;
+      font-family: 'Pacifico', cursive;
+    }
+
+    .authorfont {
+      font-size: 20px;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    #getquote, #tweet {
+      border: 1px solid black;
+      border-radius: 0%;
+    }
+  </style>
+
+</head>
+
+<body class="wallpaper">
+  
+  <nav class="navbar navbar-default  ">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#" style="font-size: 40px; font-family: 'Oxygen', sans-serif; color:red;"><strong>Random <em>"Quote"</em> Generator </strong></a>
+      </div>
+    <ul>
+      <button class="btn btn-info" onclick="about()">
+        <span class="glyphicon glyphicon-info-sign" style="top: 2.5px;"></span> About 
+      </button>
+    </ul>
+    </div>
+  </nav>
+
+<div class="quoteBox">
+  
+  <div class="well well-lg ">
+  <p class="text-center boxed quotefont">
+    <span id="quote"> Loading... </span>
+  </p>
+  <p class="text-right boxed authorfont">
+    <b><span id="author"></span></b>
+  </p>
+  </div>
+
+  <div align="right">
+    <button class="btn btn-success" id="getquote" onclick="newQuote()"> New Quote</button>
+    <a class="button btn btn-default" id="tweet" onclick="tweetQuote()" target="_blank">
+      <i class="fa fa-twitter"></i> Tweet 
+    </a>
+  </div>
+</div>
+
+<div class="footer text-center" style="font-family: 'Dancing Script',cursive;">&#0169 
+  <a href="https://codepen.io/ank8yadav">
+    <span style="color:#000000">Ankit Yadav</span>
+  </a>
+</div>
+
+</body>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+      
+  var Quote='',Author='';
+
+  function about()
+  {
+    window.alert("Random Quote App made by Ankit Yadav as a project for Front End Development course on FreeCodeCamp.\nFeedbacks are always appreciated :) ");  
+  }
+
+  var i=0;
+
+  function newQuote()
+  {
+    $.ajax({
+              url: 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
+              async:true,
+              success: function(data) { 
+                var post = data.shift();
+                post.content = post.content.replace(/<p>|<\/p>/gi,"");
+                Quote = post.content;
+                Author = post.title;
+              $( '#quote' ).html( Quote );
+              $( '#author' ).html( '- '+ Author );
+            
+              $('#tweet').attr('href','https://twitter.com/intent/tweet?text='+encodeURIComponent(Quote + "- "+ Author) );
+            }, cache: false});
+   }
+
+  function tweetQuote()
+  {
+    open('https://twitter.com/intent/tweet?text='+encodeURIComponent(Quote + "- "+ Author));
+  }
+
+  newQuote();
+
+</script>
+
+</html>
