@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pomodoro Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+    <link rel='stylesheet prefetch'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css'>
+    <link rel='stylesheet prefetch'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link href="https://fonts.googleapis.com/css?family=Patua+One|Catamaran|Ubuntu|Bungee" rel="stylesheet">
+
+    <style>
+        .icn {
+            position: relative;
+            width: 5vw;
+            right: 3vw;
+            bottom: .4vw;
+        }
+
+        .time {
+            width: 20vw;
+            height: 20vw;
+            border: 3px solid #000;
+            border-radius: 50%;
+            font-family: 'Bungee', cursive;
+            font-size: 10vw;
+            background-color: #008B00; //green;
+            color: white;
+        }
+
+        #Break {
+            width: 5vw;
+            height: 5vw;
+            margin-left: 50vw;
+            font-family: 'Bungee', cursive;
+            font-size: 3vw;
+            border: 2px solid #000;
+            border-radius: 100%;
+            background-color: #cD0000; //Red;
+            color: White;
+        }
+
+        li {
+            border: 1px solid #000;
+            border-radius: 100%;
+        }
+    </style>
+</head>
+
+<body style="background-color:#ebebeb;">
+    <div style="background-color:#D2691E;">
+        <div class="container">
+            <h1 class="text-white" style="font-size:5vw;">
+                <img class="icn" src="https://png.icons8.com/metro/540//timer.png" alt="icon" />Pomodoro Clock
+                <button id="about" class="btn btn-default" onclick="about()">
+                    <span class="glyphicon glyphicon-info-sign"
+                        style="top: 2.5px;font-family:'Ubuntu';background-color:#"></span> About
+                </button>
+            </h1>
+        </div>
+    </div><br>
+
+    <button id="res" class="btn btn-default" style="margin-left:4vw;display:block;border:1px solid;border-radius:50px;"
+        onClick="Reset()"><b>Reset</b></button>
+    <input id="Break" class="text-center" type="text" readonly="readonly" value="2">
+    <div class="btn btn-group" style="position:relative;top:50px;right:95px;">
+        <li onCLick="bInc()" class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"
+                style="top: 0.5vh;"></span></li>
+        <li onCLick="bDec()" class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"
+                style="top: 0.5vh;"></span></li>
+    </div>
+    <div style="margin-left: 30vw;margin-top:3vh;;">
+        <div class="row">
+            <input class="time text-center" id="mins" readonly="readonly" type="text" value="25">
+            <div class="btn btn-group" style="position:relative;top:18vh;width:7vw;height:10vh;">
+                <li id="minUp" onCLick="minInc()" class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"
+                        style="top: 0.5vh;"></span></li>
+                <li id="minDown" onCLick="minDec()" class="btn btn-default"><span
+                        class="glyphicon glyphicon-chevron-down" style="top: 0.5vh;"></span></li>
+            </div>
+            <input class="time text-center" id="secs" type="text" readonly="readonly" value="00">
+
+        </div>
+        <button id="strt" class="btn btn-default"
+            style="margin-left:19.8vw;display:block;border:1px solid;border-radius:50px;" onClick="play()">
+            <span class="glyphicon glyphicon-triangle-right" style="top: 0.4vh;right: 0.2vw"></span>
+            <b>START</b>
+        </button>
+    </div>
+
+</body>
+
+<!-- Scripts -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+    function about() {
+        window.alert("Pomodoro Clock made by Ankit Yadav as a project for Front End Development course on FreeCodeCamp.\nFeedbacks are always appreciated :) ");
+
+    }
+
+    var first = document.getElementById("mins");
+    var second = document.getElementById("secs");
+    var initialMin = Number(first.value);
+    var initialSec = Number(second.value);
+    var execTimes = 0;
+
+    function Reset() {
+        $("#mins").val(initialMin);
+        $("#secs").val("0" + initialSec);
+    }
+
+    function minInc() {
+        if (first.value <= 60)
+            $("#mins").val((Number(first.value) + 1));
+    }
+    function minDec() {
+        if (first.value != 0)
+            $("#mins").val((Number(first.value) - 1));
+    }
+
+    function bInc() {
+        if (document.getElementById("Break").value < 10)
+            $("#Break").val((Number(document.getElementById("Break").value) + 1));
+    }
+    function bDec() {
+        if (document.getElementById("Break").value != 1)
+            $("#Break").val((Number(document.getElementById("Break").value) - 1));
+    }
+
+    function play() {
+        $("#strt").addClass("hide");
+        var min, secs;
+
+        min = first.value;
+        secs = second.value;
+        initialMin = min;
+        initialSec = secs;
+
+        console.log("MINS : " + min);
+
+        var interval = setInterval(function () {
+            execTimes += 1;
+            console.log(" EXECUTED TIMES : " + execTimes);
+            if (second.value == 0) {
+                min = min - 1;
+                secs = 59
+                console.log("MIN : " + min + "SECOND : " + secs);
+                $("#mins").val(min);
+                $("#secs").val(secs);
+            }
+            else {
+                secs -= 1;
+                console.log("SECOND : " + secs);
+                if (secs >= 10)
+                    $("#secs").val(secs);
+                else
+                    $("#secs").val("0" + secs);
+            }
+            if (min == 0 && secs == 0) {
+                clearInterval(interval);
+                console.log("----ROGER EXEC TIME GREATER-------");
+                $("#mins,#secs").attr('style', 'background-color:red; color:white;');
+                itsBreak();
+            }
+
+        }, 1000);
+
+    }
+
+
+    function itsBreak() {
+        var startBreak = Number(document.getElementById("Break").value);
+        $("#mins").val(startBreak);
+        var min = Number(first.value);
+        var secs = 0;
+        console.log(" Break Init Time : " + min + ":" + secs);
+
+        var breakInterval = setInterval(function () {
+            if (secs == 0) {
+                min = min - 1;
+                secs = 59;
+                console.log("Break MIN : " + min);
+                console.log("Break SECOND : " + secs);
+
+                $("#mins").val(min);
+                $("#secs").val(secs);
+            }
+            else {
+                secs -= 1;
+                if (secs >= 10)
+                    $("#secs").val(secs);
+                else
+                    $("#secs").val("0" + secs);
+            }
+            if (min == 0 && secs == 0) {
+                clearInterval(breakInterval);
+                $("#mins,#secs").attr('style', 'background-color:green; color:white;');
+                $("#mins").val(initialMin);
+                $("#secs").val(initialSec);
+                play();
+            }
+
+        }, 1000);
+    }
+</script>
+
+</html>

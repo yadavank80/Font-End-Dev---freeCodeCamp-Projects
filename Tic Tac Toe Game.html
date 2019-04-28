@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <link href="https://fonts.googleapis.com/css?family=Patua+One|Ubuntu" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <style>
+        .icn {
+            position: relative;
+            width: 5vw;
+            right: 3vw;
+            bottom: .4vw;
+        }
+
+        #about {
+            bottom: 100px;
+            margin-left: 40%;
+            margin-bottom: 1%;
+        }
+
+        #grid {
+            position: relative;
+            margin: 10vh 30vw 10vh 33vw;
+        }
+
+        .bdr {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            background-color: #F00;
+            border-radius: 0px;
+            color: white;
+            font-size: 2.5vw;
+            font-family: "Ubuntu";
+
+        }
+
+        .results {
+            position: relative;
+            margin: 0 0 0 20vw;
+            width: 15vw;
+            height: 4vh;
+            font-family: "Ubuntu";
+        }
+
+        .grn {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body style="background-color:#ebebeb;">
+    <div style="background-color:#D2691E;">
+        <div class="container">
+            <h1 class="text-white text-center" style="font-size:5vw;">Tic Tac Toe
+            </h1>
+        </div>
+    </div><br>
+
+    <h6 style="margin:5vh 0 0 35vw;"><b>NOTE: Player A is:&xcirc; and player B is: &times;</b></h6>
+    <div id="grid" class="container">
+        <div class="btn btn-group ">
+            <button id="1" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="2" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="3" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <h2 class="results" id="A"></h2>
+        </div><br>
+        <div class="btn btn-group" style="bottom:14px;">
+            <button id="4" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="5" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="6" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <h2 class="results" id="B"></h2>
+        </div><br>
+        <div class="btn btn-group" style="position:relative;bottom:28px;">
+            <button id="7" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="8" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <button id="9" class="btn btn-default btn-group bdr" onclick="putSign(this)" value="-1"></button>
+            <h2 class="results" id="res" style="margin-left: 20.5vw;"></h2>
+
+        </div>
+    </div>
+    <h4 id="showTime" style="margin:3vh 0 3vh 35vw;font-family:'Ubuntu';"></h4>
+    <div class="footer text-center" style="font-family: 'Ubuntu';">&#0169 <a href="https://codepen.io/ank8yadav">Ankit
+            Yadav</a></div>
+</body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+    var sign = 0;
+    var aWin = 0, bWin = 0;
+
+    function check() {
+        var a, b, c;
+        var winning = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
+        [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
+
+        for (var i = 0; i < 8; i++) {
+            a = document.getElementById(winning[i][0]);
+            b = document.getElementById(winning[i][1]);
+            c = document.getElementById(winning[i][2]);
+
+            if (a.value == 0 && b.value == 0 && c.value == 0) {
+                $("#" + a.id + ",#" + b.id + ",#" + c.id).addClass("grn");
+                return 0;
+            }
+            if (a.value == 1 && b.value == 1 && c.value == 1) {
+                $("#" + a.id + ",#" + b.id + ",#" + c.id).addClass("grn");
+                return 1;
+            }
+        }
+    }
+
+    function putSign(target) {
+        var win = -1;
+
+        if (target.value == -1) {
+            sign++;
+            if (sign % 2 == 0) {
+                $("#" + target.id).html("&times;").val("0").addClass("disabled");
+                $("#play").removeClass("hidden");
+            }
+            else {
+                $("#" + target.id).html("&xcirc;").val("1").addClass("disabled");;
+                $("#play").removeClass("hidden");
+            }
+        }
+
+        win = check();
+
+        if (win == 1) {
+            aWin++;
+            $("#res").html("&xcirc; wins");
+            $("button").val(-2).addClass("disabled");
+            $("#A").html("A: " + aWin);
+            wait();
+        }
+        else if (win == 0) {
+            bWin++;
+            $("#res").html("&times; wins");
+            $("button").val(-2).addClass("disabled");
+            $("#B").html("B: " + bWin);
+            wait();
+        }
+        else if (sign % 9 == 0) {
+            $("#res").html("Draw");
+            wait();
+        }
+    }
+
+    function wait() {
+        var sec = 3;
+        var v = setInterval(function () {
+            $("#showTime").removeClass("hidden").html("Next game starts in: " + sec);
+            sec--;
+            if (sec == -1) {
+                $("#showTime").addClass("hidden");
+                clearInterval(v);
+                playAgain(v);
+            }
+        }, 1000);
+    }
+
+    function playAgain(v) {
+        sign = 0;
+        $("#play").addClass("hidden");
+        $("#res").html(' ');
+        $("button").html(' ').val(-1).removeClass("disabled grn");
+    }
+</script>
+
+</html>

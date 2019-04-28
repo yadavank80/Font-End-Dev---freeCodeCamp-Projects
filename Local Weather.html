@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> Your Local Weather</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
+    <link href="https://fonts.googleapis.com/css?family=Oxygen|Titillium+Web|Nunito" rel="stylesheet">
+</head>
+
+<style>
+    .header img {
+        float: left;
+        width: 80px;
+        height: 75px;
+    }
+
+    .header h1 {
+        position: relative;
+        left: 2%;
+    }
+
+    .header button {
+        position: relative;
+        left: 35%;
+        bottom: 5px;
+    }
+
+    .icon {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        bottom: 8px;
+        left: 10px;
+    }
+
+    .temp {
+        font-size: 75px;
+        padding-left: 10%;
+        font-family: 'Titillium Web', sans-serif;
+    }
+
+    .mintemp {
+        font-size: 30px;
+        font-family: 'Titillium Web', sans-serif;
+    }
+
+    .maxtemp {
+        font-size: 30px;
+        padding-left: 10%;
+        font-family: 'Titillium Web', sans-serif;
+    }
+
+    .convert {
+        bottom: 5px;
+        display: block;
+    }
+</style>
+
+<!-- Body -->
+
+<body style="background-color:#ECF0F1;">
+    <div>
+        <div class="header" style="background-color:#F39C12;">
+            <div class="container"><br>
+                <img src="http://icons.veryicon.com/ico/System/Icons8%20Metro%20Style/Weather%20Partly%20cloudy%20day.ico"
+                    alt="logo" />
+                <h1 style="font-family: 'Oxygen', sans-serif; color:#1C2833;"><strong>Your Local Weather</strong><button
+                        class="btn btn-info" onclick="about()">&#9432 About</button></h1>
+            </div>
+        </div>
+        <div class="container-fluid" style="padding-top:10%; padding-left:15%;padding-right:15%;">
+            <div id="data">
+                <h1 style="font-family: 'Nunito', sans-serif;"><strong><span id="city"></span><span
+                            id="country"></span></strong>
+                    <div style="padding-left:35%;" class="btn-group">
+                        <button id="Cel" class="btn btn-danger convert">&#176 C</button>
+                        <button id="Fah" class="btn btn-danger convert">&#176 F</button>
+                    </div>
+                </h1>
+                <div style="padding-left:35%;font-family: 'Titillium Web', sans-serif;">
+                    <h2><strong><span id="weather"></span><strong> <img id="wIcon" class="icon" /></h2>
+                </div>
+                <p style="padding-left:20%;">
+                    <span id="min_temp" class="mintemp"></span>
+                    <span id="curr_temp" class="temp"></span>
+                    <span id="max_temp" class="maxtemp"></span>
+                </p>
+                <h2 style="padding-left:35%;font-family: 'Titillium Web', sans-serif;"><span id="windSpeed"></span></h2>
+            </div>
+        </div>
+        <div class="footer text-center" style="font-family: 'Oxygen';padding-top:5%;">&#0169 <a
+                href="https://codepen.io/ank8yadav">Ankit Yadav</a></div>
+</body>
+
+<!-- Scripts -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+    //var lat, lon;
+    function about() {
+        window.alert("Local Weather App made by Ankit Yadav as a project for Front End Development course on FreeCodeCamp.\nFeedbacks are always appreciated :) ");
+
+    }
+
+    var min, curr, max;
+
+    function getPosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = "lat=" + position.coords.latitude;
+                var lon = "lon=" + position.coords.longitude;
+                getWeather(lat, lon);
+            });
+        }
+    }
+
+    function getWeather(lat, lon) {
+        $.ajax({
+            url: "https://fcc-weather-api.glitch.me/api/current?" + lat + "&" + lon,
+            success: function (data) {
+                min = data.main.temp_min;
+                curr = data.main.temp;
+                max = data.main.temp_max;
+
+                $("#Cel").addClass("active");
+                $("#wIcon ").attr('src', data.weather[0].icon);
+                $("#city").html("You're in " + data.name);
+                $("#country").html(", " + data.sys.country);
+                $("#weather").html(data.weather[0].main);
+                $("#curr_temp").html(curr + " &#8451");
+                $("#min_temp").html("Min: " + min + " &#8451");
+                $("#max_temp").html("Min: " + max + " &#8451");
+                $("#windSpeed").html("Wind Speed: " + data.wind.speed + " km/h");
+
+            }
+
+        });
+
+    }
+
+    $(document).ready(function () {
+        getPosition();
+
+        $("#Fah").on("click", function () {
+
+            $("#Fah").addClass("active");
+            $("#Cel").removeClass("active");
+
+            min = Math.floor(min * 1.8 + 32);
+            max = Math.floor(max * 1.8 + 32);
+            curr = Math.floor(curr * 1.8 + 32);
+
+            $("#curr_temp").html(curr + " &#8457");
+            $("#min_temp").html("Min: " + min + " &#8457");
+            $("#max_temp").html("Min: " + max + " &#8457");
+
+        });
+
+        $("#Cel").on("click", function () {
+
+            $("#Cel").addClass("active");
+            $("#Fah").removeClass("active");
+
+            min = Math.floor((min - 32) * 0.55);
+            curr = Math.floor((curr - 32) * 0.55);
+            max = Math.floor((max - 32) * 0.55);
+
+            $("#curr_temp").html(curr + " &#8451");
+            $("#min_temp").html("Min: " + min + " &#8451");
+            $("#max_temp").html("Min: " + max + " &#8451");
+
+        });
+
+    });
+</script>
+
+</html>

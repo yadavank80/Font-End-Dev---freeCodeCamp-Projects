@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Simon Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Acme|Exo+2" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <style>
+        .main-container {
+            position: relative;
+            min-width: 385px;
+            width: 25%;
+            margin: 6% 0 0 37vw;
+            background: hsl(300, 90%, 50%) -webkit-radial-gradient(left, hsl(360, 90%, 50%), hsl(40, 90%, 50%));
+            border: 15px solid black;
+            border-radius: 30%;
+            padding: 2% 0 0 2%;
+        }
+
+        .display-console {
+            position: relative;
+            margin-left: 8.5%;
+            margin-top: 28%;
+            padding: 15px 0px 20px 15px;
+            min-width: 230px;
+            min-height: 70px;
+            width: 230px;
+        }
+
+        .btnn {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            border: 6px solid black;
+            border-radius: 7.77px;
+            z-index: 1;
+        }
+
+        .firstOne {
+            margin-left: 1%;
+            background-color: #C00;
+            border-top-left-radius: 50%;
+            border-bottom-right-radius: 50%;
+        }
+
+        .secondOne {
+            margin: 1% 0 0 -1.5%;
+            left: 0px;
+            background-color: hsl(120, 72%, 32%);
+            border-bottom-left-radius: 50%;
+        }
+
+        .thirdOne {
+            margin-left: 1%;
+            background-color: hsl(238, 56%, 38%);
+            border-top-right-radius: 50%;
+        }
+
+        .fourthOne {
+            margin-left: -1.5%;
+            background-color: hsl(49, 100%, 41%);
+            border-top-left-radius: 50%;
+            border-bottom-right-radius: 50%;
+        }
+
+        .count {
+            position: relative;
+            background-color: #ff8c00;
+            color: white;
+            margin: -197px 0 0 85px;
+            width: 115px;
+            height: 115px;
+            font-family: 'Exo 2', 'Ubuntu';
+            font-size: 3em;
+            font-weight: 600;
+            text-align: center;
+            padding-top: 22px;
+            border: 5px solid black;
+            border-radius: 100%;
+            z-index: 2;
+        }
+
+        .ctrlBtn {
+            position: relative;
+            background-color: black;
+            min-width: 70px;
+            width: 100px;
+            color: white;
+            border: 1px solid white;
+            border-radius: 2px;
+            font-family: 'Acme', 'Ubuntu';
+            font-size: 1.3em;
+            font-weight: 600;
+            text-align: center;
+            padding-bottom: 3px;
+        }
+
+
+        .strict {
+            position: relative;
+            width: 12.5px;
+            height: 12.5px;
+            font-size: 10px;
+            border: 1px;
+            background-color: green;
+            border-radius: 100%;
+            padding-top: 7.07%;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            .main-container {
+                margin: 5% 5% 5% 5%;
+                width: 385px;
+                padding: 30px 0 0 30px;
+            }
+        }
+    </style>
+</head>
+
+
+<body style="background:url('http://dreamicus.com/data/wall/wall-03.jpg');">
+    <div class="jumbotron text-center"
+        style="background-color:#780000;color:white;font-size:3.5em;padding: 1% 0 0.4% 0;">Simon&#174; Game</div>
+    <div class="main-container">
+        <div id="row-1">
+            <button id="red" class="btnn firstOne" onClick="check(this)" value="0"></button>
+            <button id="green" class="btnn secondOne" onClick="check(this)" value="1"></button>
+        </div>
+        <div id="row-2">
+            <button id="blue" class="btnn thirdOne active" onClick="check(this)" value="2"></button>
+            <button id="yellow" class="btnn fourthOne" onClick="check(this)" value="3"></button>
+        </div>
+        <p id="showCount" class="count">0</p>
+        <div class="display-console">
+            <button class="ctrlBtn" onclick="reset()">Reset</button>
+            <button id="strictBtn" class="ctrlBtn" onclick="isStrictMode()"
+                style="background-color:green;">Strict</button>
+            <button class="ctrlBtn" onclick="start()" style="width:204px;">Start</button>
+        </div>
+    </div>
+    <div class="footer text-center" style="font-family: 'Ubuntu';margin-top:2%; font-size:1.2em;">&#0169 <b><a
+                href="https://codepen.io/ank8yadav">Ankit Yadav</a></b></div>
+</body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+<script id="rendered-js">
+    var gameCount = 0;
+    var steps = new Array();
+    var strictMode = false;
+    var userInput = 0;
+    var u = new Array();
+
+    var colors = {
+        'rd': 'background-color:Red;',
+        'rdLit': 'background-color:#C00;',
+        'grn': 'background-color:Lime;',
+        'grnLit': 'background-color:hsl(120, 72%, 32%);',
+        'blu': 'background-color:hsl(238, 56%, 51%);',
+        'bluLit': 'background-color:hsl(238, 56%, 38%);',
+        'ylw': 'background-color:hsl(50, 98%, 60%);',
+        'ylwLit': 'background-color:hsl(49, 100%, 41%);'
+    };
+
+    function playSound(btn) {
+        btn++;
+        if (btn > 4) return;
+        var fURL = "https://s3.amazonaws.com/freecodecamp/simonSound" + btn + ".mp3";
+        var file = new Audio(fURL);
+        file.play();
+    }
+
+    function litRed() {
+        $("#red").attr('style', colors.rd);
+        var pause = setTimeout(function () { $("#red").attr('style', colors.rdLit); }, 300);
+    }
+
+    function litGreen() {
+        $("#green").attr('style', colors.grn);
+        var pause = setTimeout(function () { $("#green").attr('style', colors.grnLit); }, 300);
+    }
+
+    function litBlue() {
+        $("#blue").attr('style', colors.blu);
+        var pause = setTimeout(function () { $("#blue").attr('style', colors.bluLit); }, 300);
+    }
+
+    function litYellow() {
+        $("#yellow").attr('style', colors.ylw);
+        var pause = setTimeout(function () { $("#yellow").attr('style', colors.ylwLit); }, 300);
+    }
+
+    function start() {
+        gameCount++;
+        if (gameCount > 20) {
+            window.alert("Congratulations! You won the game.");
+            reset();
+        }
+        else {
+            $("#showCount").html(gameCount);
+            play();
+        }
+    }
+
+
+    function play() {
+        var i = 0, nextStep = Math.floor(10 * Math.random()) % 4;
+        steps.push(nextStep);
+        displayTiles();
+    }
+
+    function displayTiles() {
+        var i = 0, pause;
+        var v = setInterval(function () {
+
+            if (i > steps.length)
+                clearInterval(v);
+            else {
+                playSound(steps[i]);
+
+                if (steps[i] == 0) litRed();
+                if (steps[i] == 1) litGreen();
+                if (steps[i] == 2) litBlue();
+                if (steps[i] == 3) litYellow();
+                i++;
+            }
+        }, 1000);
+    }
+
+    function check(selectedBtn) {
+        u.push(selectedBtn.value);
+        var d;
+        playSound(selectedBtn.value);
+
+        if (selectedBtn.id == "red") litRed();
+        else if (selectedBtn.id == "green") litGreen();
+        else if (selectedBtn.id == "blue") litBlue();
+        else if (selectedBtn.id == "yellow") litYellow();
+
+        if (steps.length == 1) {
+            if (steps[0] == selectedBtn.value) {
+                userInput = 0;
+                u = [];
+                d = setTimeout(start, 1000);
+            }
+            else {
+                userInput = 0; u = [];
+                $("#showCount").html("Wrong Input").attr('style', 'font-size:1.5em');
+                d = setTimeout(function () {
+                    $("#showCount").html(gameCount).attr('style', 'font-size:3em');
+                    displayTiles();
+                }, 2000);
+            }
+        }
+        else {
+            if (steps[userInput] == selectedBtn.value) {
+                userInput++;
+                if (u.length == steps.length) {
+                    userInput = 0;
+                    u = [];
+                    d = setTimeout(start, 1000);
+                }
+            }
+            else {
+                if (!strictMode) {
+                    userInput = 0; u = [];
+                    $("#showCount").html("Wrong Input").attr('style', 'font-size:1.5em');
+                    d = setTimeout(function () {
+                        $("#showCount").html(gameCount).attr('style', 'font-size:3em');
+                        displayTiles();
+                    }, 2000);
+                }
+                else {
+                    steps = [];
+                    gameCount = 0; u = [];
+                    $("#showCount").html("Wrong! Start Again").attr('style', 'font-size:1.3em');
+                    d = setTimeout(function () {
+                        $("#showCount").html(gameCount).attr('style', 'font-size:3em');
+                        displayTiles();
+                        start();
+                    }, 2000);
+                }
+            }
+        }
+    }
+
+    function isStrictMode() {
+        if (strictMode == false) {
+            strictMode = true;
+            $("#strictBtn").attr('style', 'background-color: red;');
+        }
+        else {
+            strictMode = false;
+            $("#strictBtn").attr('style', 'background-color: green;');
+        }
+        console.log("Strict Mode is " + strictMode);
+    }
+
+    function reset() {
+        gameCount = 0;
+        u = [];
+        userInput = 0;
+        steps = [];
+        strictMode = false;
+        $("#strictBtn").attr('style', 'background-color: green;');
+        $("#showCount").html(gameCount);
+    }
+</script>
+
+</html>

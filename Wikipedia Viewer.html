@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wikipedia Viewer</title>
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link href="https://fonts.googleapis.com/css?family=Patua+One|Catamaran|Ubuntu" rel="stylesheet">
+
+    <style>
+        .icon {
+            position: relative;
+            height: 80px;
+        }
+
+        .heading {
+            position: relative;
+            font-family: 'Patua One', cursive;
+            color: #FFFFFF;
+        }
+
+        #me {
+            position: relative;
+            margin-left: 5%;
+            font-size: 15px;
+
+        }
+
+        #about {
+            bottom: 100px;
+            margin-left: 40%;
+            margin-bottom: 1%;
+        }
+
+        input {
+            margin-top: 5%;
+            margin-bottom: 5%;
+            margin-left: 15%;
+            font-size: 35px;
+            width: 55%;
+            font-family: 'Catamaran', sans-serif;
+            border: 2px solid #21618C;
+            border-radius: 15px;
+        }
+
+        #search {
+            position: relative;
+            font-size: 28px;
+            bottom: 6px;
+            border: 2px solid #21618C;
+            border-radius: 15px;
+        }
+
+        ul {
+            font-family: 'Catamaran', sans-serif;
+
+
+        }
+
+        .listBackgd {
+            background-color: #5A8FEA;
+        }
+    </style>
+
+</head>
+
+<!-------------------------- Body -------------------------->
+
+<body style="background-color:#F2F3F4;">
+    <div class="header" style="background-color:#1F618D;">
+        <div class="container">
+            <h1 class="heading">
+                <img class="icon" src="http://www.iconsdb.com/icons/download/soylent-red/magnifying-glass-3-512.gif"
+                    alt="logo" />
+                <strong>Wiki viewR<strong>
+                        <span id="me">by <a href="https://codepen.io/ank8yadav" target="blank"><span
+                                    style="font-family: 'Catamaran';color:#B3B6B7;">Ankit</a></span>
+                        <button id="about" class="btn btn-default" onclick="about()"><span
+                                class="glyphicon glyphicon-info-sign" style="top: 2.5px;font-family:'Ubuntu'"></span>
+                            About</button>
+            </h1>
+        </div>
+    </div>
+
+    <div id="res" class="container">
+        <div>
+            <input id="query" placeholder="Search..." />
+            <button id="search" class="btn btn-default" onclick="getContent()"><span class="glyphicon glyphicon-search"
+                    style="top:5px;"></span> Search</button>
+        </div>
+        <ul id="" class="list-group show"></ul>
+    </div>
+    <div class="footer text-center" style="font-family: 'Ubuntu';">&#0169 <a href="https://codepen.io/ank8yadav">Ankit
+            Yadav</a></div>
+</body>
+
+<!-------------------------- Scripts -------------------------->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+    function about() {
+        window.alert("Wikipedia Viewer App made by Ankit Yadav as a project for Front End Development course on FreeCodeCamp. Feedbacks are always appreciated :) ");
+    }
+    var i = 0;
+    function changecolor(id) {
+        $("#" + id).removeClass("listBackgd");
+    }
+    function getContent() {
+        $("ul").html('');
+        var listView;
+        var query = document.getElementById("query").value;
+        $.ajax({
+            url: '//en.wikipedia.org/w/api.php',
+            data: { action: 'query', list: 'search', srsearch: query, format: 'json' },
+            dataType: 'jsonp',
+            success: function (data) {
+                arr = data.query.search;
+
+                for (var i = 0; i < arr.length - 1; i++) {
+                    listView = "<a id='data" + i + "' href= 'https://en.wikipedia.org/?curid=" + arr[i].pageid + "'class='list-group-item listBackgd' ><h3 style='color:#000000;'><b>" + arr[i].title + "</b></h3><h4 style='color:#000000;'>" + arr[i].snippet + "</h4></a>";
+                    //console.log(listView);
+                    $("ul").append(listView);
+                }
+            },
+            cache: false
+        });
+    }
+</script>
+
+</html>

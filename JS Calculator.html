@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Patua+One|Catamaran|Ubuntu" rel="stylesheet">
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+
+    <style>
+        .icon {
+            position: relative;
+            height: 80px;
+        }
+
+        .heading {
+            position: relative;
+            font-family: 'Patua One', cursive;
+            color: #FFFFFF;
+        }
+
+        #me {
+            position: relative;
+            margin-left: 5%;
+            font-size: 15px;
+
+        }
+
+        #about {
+            bottom: 100px;
+            margin-left: 40%;
+            margin-bottom: 1%;
+        }
+
+        #inputQ {
+            margin: 5% 0% 2% 20%;
+            padding-left: 5px;
+            font-size: 35px;
+            width: 29%;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 7px;
+            font-family: 'Catamaran', sans-serif;
+
+        }
+
+        .num1 {
+            position: relative;
+            margin: 0% 0% 10px 20%;
+            font-size: 28px;
+            width: 60px;
+            height: 60px;
+            bottom: 6px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+
+        .bg {
+            background-color: #FFA000;
+        }
+
+        .bgO {
+            background-color: #D35400;
+        }
+
+        .num {
+            position: relative;
+            margin: 0% 0% 10px 2%;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            bottom: 6px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+
+        .operator {
+            position: relative;
+            margin-left: 2%;
+            margin-bottom: 10px;
+            font-size: 33px;
+            width: 60px;
+            height: 60px;
+            bottom: 6px;
+            border: 2px solid #000000;
+            border-radius: 50px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+
+<body style="background-color:#D0D3D4;">
+    <div class="header" style="background-color:#3949AB;">
+        <div class="container">
+            <h1 class="heading">
+                <img class="icon"
+                    src="https://cdn6.aptoide.com/imgs/a/5/6/a56921206ee1a03b6e0cb17ddf7c3a74_icon.png?w=240"
+                    alt="logo" />
+                <strong>Calculator<strong>
+
+                        <button id="about" class="btn btn-default" onclick="about()"><span
+                                class="glyphicon glyphicon-info-sign" style="top: 2.5px;font-family:'Ubuntu'"></span>
+                            About</button>
+            </h1>
+        </div>
+    </div>
+
+    <div id="res" class="container">
+        <div id="buttons" class="container-fluid">
+            <input type="text" id="inputQ" align="right" placeholder="0"></input><br>
+            <button class="bg btn btn-default num1" id="one" onclick="setString(this)" value="1"> 1 </button>
+            <button class="bg btn btn-default num" id="two" onclick="setString(this)" value="2"> 2 </button>
+            <button class="bg btn btn-default num" id="three" onclick="setString(this)" value="3"> 3 </button>
+            <button class="bgO btn btn-default operator" id="add" onclick="setString(this)" value="+"> + </button><br>
+            <button class="bg btn btn-default num1" id="four" onclick="setString(this)" value="4"> 4 </button>
+            <button class="bg btn btn-default num" id="fice" onclick="setString(this)" value="5"> 5 </button>
+            <button class="bg btn btn-default num" id="six" onclick="setString(this)" value="6"> 6 </button>
+            <button class="bgO btn btn-default operator" id="sub" onclick="setString(this)" value="-"> &minus;
+            </button><br>
+            <button class="bg btn btn-default num1" id="seven" onclick="setString(this)" value="7"> 7 </button>
+            <button class="bg btn btn-default num" id="eight" onclick="setString(this)" value="8"> 8 </button>
+            <button class="bg btn btn-default num" id="nine" onclick="setString(this)" value="9"> 9 </button>
+            <button class="bgO btn btn-default operator" id="mul" onclick="setString(this)" value="*"
+                style="padding-top:2px;"> &times; </button><br>
+            <button class="bg btn btn-default num1" id="dot" onclick="setString(this)" value="."> . </button>
+            <button class="bg btn btn-default num" id="zero" onclick="setString(this)" value="0"> 0 </button>
+            <button class="bgO btn btn-default operator" id="divide" onclick="setString(this)" value="/"> &divide;
+            </button>
+            <button class="btn btn-default operator" id="clear" onclick="cl()" style="background-color:#D32F2F;"> C
+            </button><br>
+            <button class="btn btn-default" id="equal" value="=" onclick="toArray()"
+                style="margin: 0% 0% 10px 20%;position: relative;font-size: 33px;width:29%;height:60px;bottom: 6px;border: 2px solid #000000;border-radius:10px;background-color:#4CAF50;color:#ffffff;">
+                = </button>
+        </div>
+    </div>
+    <div class="footer text-center" style="font-family: 'Ubuntu';">&#0169 <a href="https://codepen.io/ank8yadav">Ankit
+            Yadav</a></div>
+</body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js">
+    function about() {
+        window.alert("Calculator App made by Ankit Yadav as a project for Front End Development course on FreeCodeCamp.\nFeedbacks are always appreciated :) ");
+
+    }
+
+    function setString(element) {
+        $('#inputQ').val($('#inputQ').val() + element.value);
+    }
+
+
+    function toArray() {
+        var arr = [], string = [], num = 0, temp = 0;
+        string = document.getElementById("inputQ").value;
+
+        for (var i = 0; i < string.length; i++) {
+            if (string[i] == '+' || string[i] == '-' || string[i] == '*' || string[i] == '/') {
+                arr.push(num);// a num var to be used.
+                arr.push(string[i]);
+                num = 0;
+            }
+            else {
+                temp = Number(string[i]);
+                num = 10 * num + temp;
+            }
+        }
+        arr.push(num);
+        toPostfix(arr);
+    }
+
+    function toPostfix(array) {
+        var stack = [], i = 0, t;
+        var new1 = [];
+        //console.log(" Rec Expression: "+ array +"  Length: " + array.length);
+
+        while (i < array.length) {
+            if (!(isNaN(array[i]))) {
+                new1.push(array[i]);	//pushed to postifx
+                //console.log("Pushed in new11: "+ array[i]);
+            }
+
+            if (array[i] == "*" || array[i] == "/" || array[i] == "+" || array[i] == "-") {
+                if (stack[0] == undefined)//if stack empty
+                {
+                    stack.push(array[i]);
+                    //console.log("First operator into stack noted: "+ array[i]);
+                }
+                else {
+                    while ((array[i] != "*" && array[i] != "/") && stack[0] != undefined) {
+                        t = stack.pop();
+                        //console.log("Popped from stack: "+ array[i]);
+                        new1.push(t);
+                        //console.log("Pushed in new11: "+ array[i]);
+                    }
+                    stack.push(array[i]);
+                    //console.log("Another operator into stack noted: "+ array[i]);
+                }
+            }
+            //console.log("INCREMENTING I form " + i +" to "+ (i+1) );
+            i++
+        }
+
+        while (stack[0] != undefined) {	//console.log("-----ROGER IN SECOND WHILE-----");
+            t = stack.pop();
+            new1.push(t);
+            //console.log("Pushed into new1: "+ array[i]);
+        }
+        //console.log(" Postfix Expression: "+ new1 +"  Length: " + new1.length);
+        calculation(new1);
+    }
+
+    function calculation(postfix) {   //console.log("---------------ROGER ENEMY CALCULATING-----------")
+        var resStack = [], a = 0, b = 0, temp = 0, i = 0;
+
+        while (i < postfix.length) {
+            if (!(isNaN(postfix[i]))) {
+                resStack.push(postfix[i]);
+                console.log(" Item Pushed: " + postfix[i] + " resStack is: " + resStack);
+            }
+            if (postfix[i] == "*") {
+                a = resStack.pop();
+                b = resStack.pop();
+                temp = a * b;
+                //console.log("Calculated *** : " + temp);
+                resStack.push(temp);
+                //console.log("Roger temp down to resStack");
+                //console.log("resStack is : " + resStack);
+            }
+            if (postfix[i] == "/") {
+                a = resStack.pop();
+                b = resStack.pop();
+                temp = b / a;
+                //console.log("Calculated /// : " + temp);
+                resStack.push(temp);
+                //console.log("Roger temp down to resStack");
+                //console.log("resStack is : " + resStack);
+            }
+            if (postfix[i] == "+") {
+                a = resStack.pop();
+                b = resStack.pop();
+                temp = a + b;
+                //console.log("Calculated +++ : " + temp);
+                resStack.push(temp);
+                //console.log("Roger temp down to resStack");
+                //console.log("resStack is : " + resStack);
+            }
+            if (postfix[i] == "-") {
+                a = resStack.pop();
+                b = resStack.pop();
+                temp = b - a;
+                //console.log("Calculated --- : " + temp);
+                resStack.push(temp);
+                //console.log("Roger temp down to resStack");
+                //console.log("resStack is : " + resStack);
+            }
+            i++;
+        }
+        //console.log("Final Stack = "  + resStack);
+        temp = resStack.pop();
+        console.log("TOTAL = " + temp);
+        $("#inputQ").val(temp);
+    }
+
+    function cl() { $("#inputQ").val(''); }
+</script>
+
+</html>
